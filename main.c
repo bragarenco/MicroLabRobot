@@ -19,6 +19,16 @@ static FILE mystdin = FDEV_SETUP_STREAM(NULL,
 
 #define STEP 20
 
+
+
+#define MOVE_APP      3 
+#define BUMPER_APP      2 
+#define FOLLOW_LINE_APP 1
+#define REMOTE_APP      0
+
+int applicationMode = MOVE_APP;
+
+
 void Timer0Init(){
 
  TIMSK |= (1<<TOIE0);
@@ -31,6 +41,8 @@ ISR(TIMER0_OVF_vect){
  SystemTick();	
 
 }
+
+
 
 
 void main (void){
@@ -64,10 +76,24 @@ void main (void){
 
 	while(1){
 		
+	
+//		switch(applicationMode){
+//		}
+
+
 		
+		if(applicationMode == MOVE_APP){
+			
+
+			//int line_pos = GetLinePos();
+			motor1_set_pwm(50);	
+			motor2_set_pwm(50);
+
+		}
+		else if(applicationMode == FOLLOW_LINE_APP){
 			SystemDelay(10);
 
-			if(0){
+			
 			int line_pos = GetLinePos();
 
 				motor1_set_pwm(40+line_pos*3);
@@ -75,23 +101,22 @@ void main (void){
 
 				//car_turn_left(line_pos);
 
-			}
-
 		
-		if(1){
-
-
-
-
-
-		char ctrl = 0;
 		
-			//ctrl = USART_Receive();
+		}
+		else if(applicationMode == REMOTE_APP){
+
+
+
+	SystemDelay(100);
+
+
+		char ctrl = USART_Receive();
 			switch(ctrl){
-				case 'w': car_forward(STEP);printf(" GO forward \r\n");	break;
-				case 's': car_backward(STEP);printf(" GO backward \r\n");	break;
-				case 'a': car_turn_left(STEP);printf(" TURN left \r\n");	break;
-				case 'd': car_turn_right(STEP);printf(" TURN right \r\n");	break;
+				case 'w': car_forward(STEP);/*printf(" GO forward \r\n");*/	break;
+				case 's': car_backward(STEP);/*printf(" GO backward \r\n");*/	break;
+				case 'a': car_turn_left(STEP);/*printf(" TURN left \r\n");	*/break;
+				case 'd': car_turn_right(STEP);/*printf(" TURN right \r\n");*/	break;
 				case 'f': car_stop();break;
 			}
 			
@@ -109,20 +134,20 @@ void main (void){
 			SystemDelay(1000);
 			
 			//car_backward();
-			motor1_set_pwm(-50);
-			motor2_set_pwm(-50);
+			motor1_set_pwm(-70);
+			motor2_set_pwm(-70);
 			SystemDelay(2000);
 
 			//car_turn_left();
-			motor1_set_pwm(50);
-			motor2_set_pwm(-50);
+			motor1_set_pwm(70);
+			motor2_set_pwm(-70);
 			SystemDelay(2000);
 			
 			//car_forward();
-			motor1_set_pwm(50);
-			motor2_set_pwm(50);
+			motor1_set_pwm(70);
+			motor2_set_pwm(70);
 			
-		}else
+		}else if (applicationMode == BUMPER_APP)
 		if (TestBumper1()){
 			
 			//car_stop();
@@ -131,18 +156,18 @@ void main (void){
 			SystemDelay(500);
 			
 			//car_backward();
-			motor1_set_pwm(-50);
-			motor2_set_pwm(-50);
+			motor1_set_pwm(-70);
+			motor2_set_pwm(-70);
 			SystemDelay(1000);
 			
 			//car_turn_left();
-			motor1_set_pwm(50);
-			motor2_set_pwm(-50);
+			motor1_set_pwm(70);
+			motor2_set_pwm(-70);
 			SystemDelay(1000);
 			
 			//car_forward();
-			motor1_set_pwm(50);
-			motor2_set_pwm(50);
+			motor1_set_pwm(70);
+			motor2_set_pwm(70);
 		}else
 		if (TestBumper2()){
 			//car_stop();
@@ -151,18 +176,18 @@ void main (void){
 			SystemDelay(500);
 			
 			//car_backward();
-			motor1_set_pwm(-50);
-			motor2_set_pwm(-50);
+			motor1_set_pwm(-70);
+			motor2_set_pwm(-70);
 			SystemDelay(1000);
 			
 //			car_turn_right();
-			motor1_set_pwm(-50);
-			motor2_set_pwm(50);
+			motor1_set_pwm(-70);
+			motor2_set_pwm(70);
 			SystemDelay(1000);
 			
 			//car_forward();
-			motor1_set_pwm(50);
-			motor2_set_pwm(50);
+			motor1_set_pwm(70);
+			motor2_set_pwm(70);
 			
 		}else
 		{

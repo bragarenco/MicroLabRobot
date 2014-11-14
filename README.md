@@ -1,6 +1,10 @@
 MicroLabRobot
 =============
 
+Lectia nr8 8 Noiembrie
+
+====
+
 Lectia nr7 1 Noiembrie
 
 =====
