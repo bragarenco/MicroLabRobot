@@ -3,6 +3,7 @@
 
 
 void car_init();
+void car_control(void);
 void car_forward();
 void car_backward();
 void car_turn_left();

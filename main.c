@@ -7,6 +7,7 @@
 #include "car.h"
 #include "report.h"
 #include "bumper.h"
+#include "adc.h"
 
 static FILE mystdout = FDEV_SETUP_STREAM(USART_Transmit, 
 										NULL,
@@ -15,6 +16,7 @@ static FILE mystdin = FDEV_SETUP_STREAM(NULL,
 										USART_Receive,
 										_FDEV_SETUP_READ);
 
+#define STEP 20
 
 void Timer0Init(){
 
@@ -37,6 +39,7 @@ void main (void){
 
 	USART_Init(51);
 	Timer0Init();
+	AdcInit();
 
 	BumperInit();
 
@@ -59,68 +62,113 @@ void main (void){
 
 
 	while(1){
-		char ctrl;
 		
-			ctrl = 0;
-			//USART_Receive();
+		
+			SystemDelay(10);
+
+
+			int line_pos = GetLinePos();
+
+				motor1_set_pwm(40+line_pos*3);
+				motor2_set_pwm(40-line_pos*3);
+
+		//ar_turn_left(line_pos);
+
+
+
+		
+		if(1){
+
+
+
+
+
+		char ctrl = 0;
+		
+			//ctrl = USART_Receive();
 			switch(ctrl){
-				case 'w': car_forward();printf(" GO forward \r\n");	break;
-				case 's': car_backward();printf(" GO backward \r\n");	break;
-				case 'a': car_turn_left();printf(" TURN left \r\n");	break;
-				case 'd': car_turn_right();printf(" TURN right \r\n");	break;
+				case 'w': car_forward(STEP);printf(" GO forward \r\n");	break;
+				case 's': car_backward(STEP);printf(" GO backward \r\n");	break;
+				case 'a': car_turn_left(STEP);printf(" TURN left \r\n");	break;
+				case 'd': car_turn_right(STEP);printf(" TURN right \r\n");	break;
 				case 'f': car_stop();break;
 			}
 			
-
-		SystemDelay(1000);
-
+		}
+		else{
+		
+		SystemDelay(500);
+	
 		
 		if (TestBumper1()&&TestBumper2() ){
+			
+			//car_stop();
 			motor1_set_pwm(0);
 			motor2_set_pwm(0);
 			SystemDelay(1000);
+			
+			//car_backward();
 			motor1_set_pwm(-50);
 			motor2_set_pwm(-50);
-			//car_backward();
 			SystemDelay(2000);
 
+			//car_turn_left();
 			motor1_set_pwm(50);
 			motor2_set_pwm(-50);
-
-			//car_turn_left();
-			SystemDelay(1000);
+			SystemDelay(2000);
+			
+			//car_forward();
 			motor1_set_pwm(50);
 			motor2_set_pwm(50);
-			//car_forward();
+			
 		}else
 		if (TestBumper1()){
+			
+			//car_stop();
 			motor1_set_pwm(0);
 			motor2_set_pwm(0);
+			SystemDelay(500);
+			
+			//car_backward();
+			motor1_set_pwm(-50);
+			motor2_set_pwm(-50);
 			SystemDelay(1000);
+			
+			//car_turn_left();
 			motor1_set_pwm(50);
 			motor2_set_pwm(-50);
-			//car_turn_left();
 			SystemDelay(1000);
+			
+			//car_forward();
 			motor1_set_pwm(50);
 			motor2_set_pwm(50);
-			//car_forward();
 		}else
 		if (TestBumper2()){
+			//car_stop();
 			motor1_set_pwm(0);
 			motor2_set_pwm(0);
+			SystemDelay(500);
+			
+			//car_backward();
+			motor1_set_pwm(-50);
+			motor2_set_pwm(-50);
 			SystemDelay(1000);
+			
+//			car_turn_right();
 			motor1_set_pwm(-50);
 			motor2_set_pwm(50);
-//			car_turn_right();
 			SystemDelay(1000);
+			
+			//car_forward();
 			motor1_set_pwm(50);
 			motor2_set_pwm(50);
-			//car_forward();
+			
 		}else
 		{
 
 			//car_forward();
 
+		}
 		}
 
 	}

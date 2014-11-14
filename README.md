@@ -1,6 +1,9 @@
 MicroLabRobot
 =============
 
+Lectia nr6 25 octombrie
+
+=====
 La lectia nr5 din 18 Octombrie, am introdus notiune de sensor, si am adugat robotului calitatea de a detecta obstacolele din fata cu ajutorul unui BUMPER SENSOR in baza a doua butoane, si schimbarea directiei in dependenta din care parte a fost obstacolul.
 Pe langa asta am introdus System Tick-ul pentru a opera cu timeouturi si retineri. la fel si conceptul de raport a starii curente a robotului cum ar fi indicatiile sensorilor si setarile PWM la roti.
 

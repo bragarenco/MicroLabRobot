@@ -1,14 +1,57 @@
 #include "report.h"
 #include "motor.h"
+#include "adc.h"
+
+
+
 
 void ShowStatusReport(void){
+	printf("\r\n");
+	printf("\r\n");
+	printf("==================================\r\n");
+	printf("| LEFT PWM %4d | RIGHT PWM %4d | \r\n", (int)GetMotor1_PWM(), (int)GetMotor2_PWM());
+	printf("----------------------------------\r\n");
+	printf("| LEFT BUMPER %d | RIGHT BUMPER %d | \r\n", TestBumper1(), TestBumper2());
+	printf("----------------------------------\r\n");
 
-printf("-----------------------------------\r\n");
-printf("|   LEFT %4d   |    RIGHT %4d  | \r\n", (int)GetMotor1_PWM(), (int)GetMotor2_PWM());
-printf("---------------------------\r\n");
-printf("| LEFT BUMPER %d |  RIGHT BUMPER %d  | \r\n", TestBumper1(), TestBumper2());
-printf("-----------------------------------\r\n");
+	
+	for (int i= 0; i<5 ; i++)
+	{
+		printf("| %4d", GetADC(i));
+	}
+		
 
+	printf("|\r\n");
+	for (int i= 0; i<5 ; i++)
+	{
+		printf("| %4d", GetSensorADC(i));
+	}
+		
+
+	printf("|\r\n");
+	for (int i= 0; i<5 ; i++)
+	{
+		printf("| %4d", GetSensor(i));
+		
+		
+	}
+	printf("|\r\n");
+
+	printf("----------------------------------\r\n");
+printf("|");
+for (int i= -25; i<25 ; i=i+3)
+	{
+		
+		if(i<GetLinePos()){
+			printf("-");
+		}else{
+			break;
+		}
+		
+	}
+	printf("X\r\n");
+
+	printf("| pos ->  %4d\r\n", GetLinePos());
 
 }
 
