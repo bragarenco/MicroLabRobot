@@ -1,6 +1,10 @@
 MicroLabRobot
 =============
 
+Versiunea la sf cursului 14 Noiembrie 
+
+===
+
 Lectia nr8 8 Noiembrie
 
 ====

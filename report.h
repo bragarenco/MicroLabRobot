@@ -5,6 +5,7 @@
 
 void ShowStatusReport(void);
 void DisplayStatusReport(void);
+int ReportBussy(void);
 
 #endif
 

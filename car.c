@@ -19,23 +19,23 @@ return;
 
 
 	
-	int pwm;
+
 	
 	
 	
-	if (pwm = GetMotor1_PWM() < 0)
+	if (GetMotor1_PWM() < 0)
 	{
 		motor1_pwm_up(1);
 	}
-	if (pwm = GetMotor1_PWM() > 0)
+	if (GetMotor1_PWM() > 0)
 	{
 		motor1_pwm_dn(1);
 	}
-	if (pwm = GetMotor2_PWM() < 0)
+	if (GetMotor2_PWM() < 0)
 	{
 		motor2_pwm_up(1);
 	}
-	if (pwm = GetMotor2_PWM() > 0)
+	if (GetMotor2_PWM() > 0)
 	{
 		motor2_pwm_dn(1);
 	}

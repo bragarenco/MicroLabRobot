@@ -8,7 +8,8 @@
 #include "report.h"
 #include "bumper.h"
 #include "adc.h"
-#include "speed.h"
+#include "encoder.h"
+#include "navigate.h"
 
 static FILE mystdout = FDEV_SETUP_STREAM(USART_Transmit, 
 										NULL,
@@ -25,14 +26,16 @@ static FILE mystdin = FDEV_SETUP_STREAM(NULL,
 #define BUMPER_APP      2 
 #define FOLLOW_LINE_APP 1
 #define REMOTE_APP      0
+#define NAVIGATE_APP      4
+#define PROGRAM_APP      5
 
-int applicationMode = MOVE_APP;
+int applicationMode = PROGRAM_APP;
 
 
 void Timer0Init(){
 
  TIMSK |= (1<<TOIE0);
- TCCR0 = 0x03; 
+ TCCR0 = 0x03;
  TCNT0 = 125;
 }
 
@@ -43,7 +46,7 @@ ISR(TIMER0_OVF_vect){
 }
 
 
-
+extern volatile char reportflag;
 
 void main (void){
 
@@ -55,6 +58,9 @@ void main (void){
 	AdcInit();
 
 	BumperInit();
+
+	InitEncoder(ENCODER_PORT, PHASE_A_1_PIN, PHASE_B_1_PIN);
+	InitEncoder(ENCODER_PORT, PHASE_A_2_PIN, PHASE_B_2_PIN);
 
 	car_init();
 
@@ -74,11 +80,19 @@ void main (void){
 	printf("---- 2 sec -----\r\n");
 
 
+
+
+
+
+
+
 	while(1){
 		
 	
 //		switch(applicationMode){
 //		}
+
+
 
 
 		
@@ -88,6 +102,17 @@ void main (void){
 			//int line_pos = GetLinePos();
 			motor1_set_pwm(50);	
 			motor2_set_pwm(50);
+
+		}
+		else if (applicationMode == PROGRAM_APP) {
+
+
+			USART_Receive();
+
+			moveForward();
+			moveForward();
+			moveForward();
+			turnLeft();
 
 		}
 		else if(applicationMode == FOLLOW_LINE_APP){
@@ -104,22 +129,63 @@ void main (void){
 		
 		
 		}
-		else if(applicationMode == REMOTE_APP){
+		else if (applicationMode == NAVIGATE_APP) {
 
-
-
-	SystemDelay(100);
-
-
-		char ctrl = USART_Receive();
-			switch(ctrl){
-				case 'w': car_forward(STEP);/*printf(" GO forward \r\n");*/	break;
-				case 's': car_backward(STEP);/*printf(" GO backward \r\n");*/	break;
-				case 'a': car_turn_left(STEP);/*printf(" TURN left \r\n");	*/break;
-				case 'd': car_turn_right(STEP);/*printf(" TURN right \r\n");*/	break;
-				case 'f': car_stop();break;
+			while (ReportBussy());
+			char ctrl = USART_Receive();
+			reportflag = 1;
+			switch (ctrl) {
+			case 'w':
+				printf(" GO forward \r\n");
+				moveForward();
+				break;
+			case 's':
+				printf(" GO backward \r\n");
+				moveBackward();
+				break;
+			case 'a':
+				printf(" TURN left \r\n");
+				turnRight();
+				break;
+			case 'd':
+				printf(" TURN right \r\n");
+				turnLeft();
+				break;
 			}
-			
+			reportflag = 0;
+		}
+
+
+
+		else if (applicationMode == REMOTE_APP) {
+
+			while (ReportBussy())
+				;
+
+			char ctrl = USART_Receive();
+			reportflag = 1;
+			switch (ctrl) {
+			case 'w':
+				car_forward(STEP);
+				printf(" GO forward \r\n");
+				break;
+			case 's':
+				car_backward(STEP);
+				printf(" GO backward \r\n");
+				break;
+			case 'a':
+				car_turn_left(STEP);
+				printf(" TURN left \r\n");
+				break;
+			case 'd':
+				car_turn_right(STEP);
+				printf(" TURN right \r\n");
+				break;
+			case 'f':
+				car_stop();
+				break;
+			}
+			reportflag = 0;
 		}
 		else{
 		

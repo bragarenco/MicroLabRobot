@@ -1,6 +1,7 @@
 #include "system.h"
 #include "report.h"
-#include "speed.h"
+#include "encoder.h"
+#include "car.h"
 
 volatile int sistem_timer=0;
 
@@ -9,7 +10,9 @@ void SystemTick(void){
 
 	DisplayStatusReport(); 
 	car_control();
-	EncoderDriver();
+	EncoderDriver(0);
+	EncoderDriver(1);
+	NavigateDriver();
 	
 	if(sistem_timer>0){
 		sistem_timer--;
