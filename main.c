@@ -8,6 +8,7 @@
 #include "report.h"
 #include "bumper.h"
 #include "adc.h"
+#include "speed.h"
 
 static FILE mystdout = FDEV_SETUP_STREAM(USART_Transmit, 
 										NULL,
@@ -66,15 +67,15 @@ void main (void){
 		
 			SystemDelay(10);
 
-
+			if(0){
 			int line_pos = GetLinePos();
 
 				motor1_set_pwm(40+line_pos*3);
 				motor2_set_pwm(40-line_pos*3);
 
-		//ar_turn_left(line_pos);
+				//car_turn_left(line_pos);
 
-
+			}
 
 		
 		if(1){

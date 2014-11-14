@@ -1,6 +1,7 @@
 #include "report.h"
 #include "motor.h"
 #include "adc.h"
+#include "speed.h"
 
 
 
@@ -9,6 +10,11 @@ void ShowStatusReport(void){
 	printf("\r\n");
 	printf("\r\n");
 	printf("==================================\r\n");
+	printf(" Encoder phase : %d", GetEncoderPhase());
+	printf(" | Direction : %d\r\n", GetEncoderDirection());
+	printf(" Period : %5d", GetEncoderPeriod());
+	printf(" | SPEED : %5d\r\n", GetEncoderSpeed());
+	printf("----------------------------------\r\n");
 	printf("| LEFT PWM %4d | RIGHT PWM %4d | \r\n", (int)GetMotor1_PWM(), (int)GetMotor2_PWM());
 	printf("----------------------------------\r\n");
 	printf("| LEFT BUMPER %d | RIGHT BUMPER %d | \r\n", TestBumper1(), TestBumper2());
