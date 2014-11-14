@@ -1,7 +1,7 @@
 #include "car.h"
 #include "motor.h"
 
-#define STEP 5
+#define STEP 20
 
 void car_init(void){
 
