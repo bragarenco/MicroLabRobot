@@ -21,25 +21,29 @@ void main (void){
 	USART_Init(51);
 	car_init();
 
-	printf("MOTOR CONTROL\r");
-	printf("forward - w\r");
-	printf("backward - s\r");
-	printf("left - a\r");
-	printf("right - d\r");
-	printf("stop - <space>\r");
-	printf("---- GO -----");
+	printf("MOTOR CONTROL\r\n");
+	printf("forward - w\r\n");
+	printf("backward - s\r\n");
+	printf("left - a\r\n");
+	printf("right - d\r\n");
+	printf("stop - <space>\r\n");
+	printf("---- GO -----\r\n");
+
+	printf("LEFT %4d    RIGHT %4d  \r\n", GetMotor1_PWM(), GetMotor2_PWM());
 
 	while(1){
 		char ctrl;
 			
 		ctrl = USART_Receive();
 		switch(ctrl){
-			case 'w': car_forward();break;
-			case 's': car_backward();break;
-			case 'a': car_turn_left();break;
-			case 'd': car_turn_right();break;
-			case ' ': car_stop();break;
+			case 'w': car_forward();printf(" GO forward \r\n");	break;
+			case 's': car_backward();printf(" GO backward \r\n");	break;
+			case 'a': car_turn_left();printf(" TURN left \r\n");	break;
+			case 'd': car_turn_right();printf(" TURN right \r\n");	break;
+			case 'f': car_stop();break;
 		}
+
+			printf("LEFT %d    RIGHT %d  \r\n", (int)GetMotor1_PWM(), (int)GetMotor2_PWM());
 
 	}
 
